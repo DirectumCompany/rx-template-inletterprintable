@@ -1,0 +1,99 @@
+{
+  "$type": "Sungero.Metadata.ModuleMetadata, Sungero.Metadata",
+  "NameGuid": "d642dfbc-cf2d-4369-8e86-fd14553c050a",
+  "Name": "PrintableTemplate",
+  "AsyncHandlers": [],
+  "ClientAssemblyName": "GD.PrintableTemplate.Client",
+  "ClientBaseAssemblyName": "GD.PrintableTemplate.ClientBase",
+  "ClientBaseNamespace": "GD.PrintableTemplate.ClientBase",
+  "ClientNamespace": "GD.PrintableTemplate.Client",
+  "Code": "Printab",
+  "CompanyCode": "GD",
+  "Cover": {
+    "NameGuid": "cb99afb5-e13a-4bc9-9755-11cd1f5e65c5",
+    "Actions": [],
+    "Background": null,
+    "Footer": {
+      "NameGuid": "23c0bda9-31df-4308-a993-fcc83049a4ea",
+      "BackgroundPosition": "Stretch"
+    },
+    "Groups": [],
+    "Header": {
+      "NameGuid": "e80ea78a-2d92-449d-8698-6fbc1a5da442",
+      "BackgroundPosition": "Stretch"
+    }
+  },
+  "Dependencies": [
+    {
+      "Id": "f2682a62-d1c8-4e71-b45c-d278d8939e89",
+      "IsSolutionModule": true,
+      "MaxVersion": "",
+      "MinVersion": ""
+    }
+  ],
+  "IconResourcesKeys": [],
+  "Importance": "Medium",
+  "InterfaceAssemblyName": "Sungero.Domain.Interfaces",
+  "InterfaceNamespace": "GD.PrintableTemplate",
+  "IsVisible": false,
+  "Libraries": [
+    {
+      "NameGuid": "b44b0e5c-938c-4b86-a2ae-32f4bfdc2ea6",
+      "Name": "MEDOSerializingXML",
+      "Scope": "Both"
+    },
+    {
+      "NameGuid": "d23613a6-6a7e-491f-8ff0-7922c8e5321f",
+      "Name": "AsposeExtensions",
+      "Scope": "Both"
+    }
+  ],
+  "Overridden": [
+    "IsVisible"
+  ],
+  "PublicFunctions": [
+    {
+      "Name": "GeneratePrintableForm",
+      "Parameters": [
+        {
+          "Name": "letter",
+          "ParameterType": "global::Sungero.RecordManagement.IIncomingLetter",
+          "ParameterTypeFullName": "Sungero.RecordManagement.IIncomingLetter, Sungero.Domain.Interfaces"
+        }
+      ],
+      "Placement": "Client",
+      "ReturnType": "void",
+      "ReturnTypeFullName": "System.Void"
+    }
+  ],
+  "PublicStructures": [],
+  "ResourceInterfaceAssemblyName": "Sungero.Domain.Interfaces",
+  "ResourceInterfaceNamespace": "GD.PrintableTemplate",
+  "ResourcesKeys": [
+    "PrintableVersionNote",
+    "DialogLabelFormat",
+    "InvalidExtention",
+    "RegDataTemplate",
+    "RegDataInResponseTo",
+    "DialogTitle",
+    "ActionResult",
+    "NoExistsSignedVersion"
+  ],
+  "ServerAssemblyName": "GD.PrintableTemplate.Server",
+  "ServerNamespace": "GD.PrintableTemplate.Server",
+  "SharedAssemblyName": "GD.PrintableTemplate.Shared",
+  "SharedNamespace": "GD.PrintableTemplate.Shared",
+  "SpecialFolders": [],
+  "Version": "0.0.1.0",
+  "Widgets": [],
+  "Versions": [
+    {
+      "Type": "ModuleMetadata",
+      "Number": 6
+    },
+    {
+      "Type": "DomainApi",
+      "Number": 3
+    }
+  ]
+}

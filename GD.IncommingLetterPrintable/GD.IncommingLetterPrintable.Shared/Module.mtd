@@ -1,0 +1,62 @@
+{
+  "$type": "Sungero.Metadata.SolutionMetadata, Sungero.Metadata",
+  "NameGuid": "f2682a62-d1c8-4e71-b45c-d278d8939e89",
+  "Name": "IncommingLetterPrintable",
+  "AsyncHandlers": [],
+  "ClientAssemblyName": "GD.IncommingLetterPrintable.Client",
+  "ClientBaseAssemblyName": "GD.IncommingLetterPrintable.ClientBase",
+  "ClientBaseNamespace": "GD.IncommingLetterPrintable.ClientBase",
+  "ClientNamespace": "GD.IncommingLetterPrintable.Client",
+  "Code": "Incommi",
+  "CompanyCode": "GD",
+  "Cover": {
+    "NameGuid": "5894c076-9c09-4ac3-a539-f41bdc8bf740",
+    "Actions": [],
+    "Background": null,
+    "Footer": {
+      "NameGuid": "9b67bffe-1ba3-4ef0-b03e-e3404c6e2c6d",
+      "BackgroundPosition": "Stretch"
+    },
+    "Groups": [],
+    "Header": {
+      "NameGuid": "8b2e63b3-0c91-4962-b298-626db9bd246b",
+      "BackgroundPosition": "Stretch"
+    }
+  },
+  "DesktopViews": [],
+  "ExplorerTreeOrder": [
+    {
+      "ItemId": "7884c11f-0b70-45ff-8976-0ec50105a395"
+    }
+  ],
+  "IconResourcesKeys": [],
+  "Importance": "Medium",
+  "InterfaceAssemblyName": "Sungero.Domain.Interfaces",
+  "InterfaceNamespace": "GD.IncommingLetterPrintable",
+  "OrderedSpecialFolders": [],
+  "PublicStructures": [],
+  "ResourceInterfaceAssemblyName": "Sungero.Domain.Interfaces",
+  "ResourceInterfaceNamespace": "GD.IncommingLetterPrintable",
+  "ResourcesKeys": [],
+  "ServerAssemblyName": "GD.IncommingLetterPrintable.Server",
+  "ServerNamespace": "GD.IncommingLetterPrintable.Server",
+  "SharedAssemblyName": "GD.IncommingLetterPrintable.Shared",
+  "SharedNamespace": "GD.IncommingLetterPrintable.Shared",
+  "SpecialFolders": [],
+  "Version": "0.0.1.0",
+  "Widgets": [],
+  "Versions": [
+    {
+      "Type": "SolutionMetadata",
+      "Number": 6
+    },
+    {
+      "Type": "ModuleMetadata",
+      "Number": 6
+    },
+    {
+      "Type": "DomainApi",
+      "Number": 3
+    }
+  ]
+}
