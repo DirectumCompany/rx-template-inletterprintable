@@ -21,27 +21,26 @@ namespace GD.PrintableTemplate.Server
     {
       var version = letter.Versions.Where(x => Signatures.Get(x).Where(s => s.SignatureType == SignatureType.Approval).Any()).OrderByDescending(x => x.Id).FirstOrDefault();
       var newVersion = this.CreatePdfVersionFromVersion(letter, version);
-      using (var pdfDocumentStream = new System.IO.MemoryStream())
+      var pdfDocumentStream = new System.IO.MemoryStream();
+      newVersion.Body.Read().CopyTo(pdfDocumentStream);
+      var regStamp = this.CreateRegStamp(letter, regStampCoordinates, true);
+      pdfDocumentStream = regStamp.AddImageToPDF(pdfDocumentStream);
+      if (letter.InResponseTo != null)
       {
-        newVersion.Body.Read().CopyTo(pdfDocumentStream);
-        var regStamp = this.CreateRegStamp(letter, regStampCoordinates, true);
-        regStamp.AddImageToPDF(pdfDocumentStream);
-        if (letter.InResponseTo != null)
-        {
-          var regStampInResponseTo = this.CreateRegStamp(letter.InResponseTo, regStampInResponseToCoordinates, false);
-          regStampInResponseTo.AddImageToPDF(pdfDocumentStream);
-        }
-        
-        var signature = Signatures.Get(version)
-          .Where(s => s.SignatureType == SignatureType.Approval && s.SignCertificate != null).FirstOrDefault();
-        if (signature != null)
-        {
-          var sigStamp = this.CreateSigStamp(signStampCoordinates, signature);
-          if (sigStamp != null)
-            sigStamp.AddImageToPDF(pdfDocumentStream);
-        }        
-        newVersion.Body.Write(pdfDocumentStream);
+        var regStampInResponseTo = this.CreateRegStamp(letter.InResponseTo, regStampInResponseToCoordinates, false);
+        pdfDocumentStream = regStampInResponseTo.AddImageToPDF(pdfDocumentStream);
       }
+        
+      var signature = Signatures.Get(version)
+          .Where(s => s.SignatureType == SignatureType.Approval && s.SignCertificate != null).FirstOrDefault();
+      if (signature != null)
+      {
+        var sigStamp = this.CreateSigStamp(signStampCoordinates, signature);
+        if (sigStamp != null)
+          pdfDocumentStream = sigStamp.AddImageToPDF(pdfDocumentStream);
+      }        
+      newVersion.Body.Write(pdfDocumentStream);
+      pdfDocumentStream.Close();
       letter.Save();
     }
     
@@ -94,11 +93,11 @@ namespace GD.PrintableTemplate.Server
     public virtual MEDOSerializingXML.MEDOStamp CreateRegStamp(Sungero.Docflow.IOfficialDocument document, Structures.Module.StampCoordinates regStampCoordinates, bool isMainDoc)
     {
       var regStampInfo = this.GetReqStamp(document, isMainDoc);
-      var stampPageType = NpoComputer.Dpad.Converter.Stamps.StampedPages.FirstPage;
+      var stampPageType = MEDOSerializingXML.Stamps.StampedPages.FirstPage;
       var stampedPages = new List<int>();
       if (regStampCoordinates.PageNumber > 1)
       {
-        stampPageType = NpoComputer.Dpad.Converter.Stamps.StampedPages.PageRange;
+        stampPageType = MEDOSerializingXML.Stamps.StampedPages.PageRange;
         stampedPages.Add(regStampCoordinates.PageNumber);
       }
       
@@ -118,16 +117,16 @@ namespace GD.PrintableTemplate.Server
     /// <returns>Штамп рег. данных в формате строки.</returns>
     public virtual string GetReqStamp(Sungero.Docflow.IOfficialDocument document, bool isMainDoc)
     {
-      var templateRegDataMainDoc = string.Empty;
+      var templateRegDataDoc = string.Empty;
       if (isMainDoc)
-        templateRegDataMainDoc = Resources.RegDataTemplate;
+        templateRegDataDoc = Resources.RegDataTemplate;
       else
-        templateRegDataMainDoc = Resources.RegDataInResponseTo;
+        templateRegDataDoc = Resources.RegDataInResponseTo;
 
       var stampLines = new List<string>();
       var regDate = document.RegistrationDate != null ? document.RegistrationDate.Value.ToString("dd.MM.yyyy") : string.Empty;
       var regNum = document.RegistrationNumber;
-      var regInfoStamp = templateRegDataMainDoc.Replace("{RegNum}", regNum).Replace("{RegDate}", regDate);
+      var regInfoStamp = templateRegDataDoc.Replace("{RegNum}", regNum).Replace("{RegDate}", regDate);
       stampLines.Add(regInfoStamp);      
       return string.Join("\n", stampLines.ToArray());
     }
@@ -144,32 +143,22 @@ namespace GD.PrintableTemplate.Server
       var commonSetting = MEDO.CommonMedoSettingses.GetAll().FirstOrDefault();
       base64PngEmblem = commonSetting.SignatureStampLogo;
       if (string.IsNullOrEmpty(base64PngEmblem))
-        base64PngEmblem = MEDO.PublicConstants.Module.StampEmblem;
-      var signaturesStamp = MEDO.PublicFunctions.Module.GetSignaturesStamps(signature, base64PngEmblem);
-      if (!string.IsNullOrEmpty(signaturesStamp))
+        base64PngEmblem = MEDO.PublicConstants.Module.StampEmblem;      
+      var stampPageType = MEDOSerializingXML.Stamps.StampedPages.FirstPage;
+      var stampedPages = new List<int>();
+      if (signStampCoordinates.PageNumber > 1)
       {
-        var stampPageType = NpoComputer.Dpad.Converter.Stamps.StampedPages.FirstPage;
-        var stampedPages = new List<int>();
-        if (signStampCoordinates.PageNumber > 1)
-        {
-          stampPageType = NpoComputer.Dpad.Converter.Stamps.StampedPages.PageRange;
-          stampedPages.Add(signStampCoordinates.PageNumber);
-        }
-        
-        var baseDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
-        var filePath = Path.Combine(baseDirectory, "wkhtmltoimage.exe");
-        if (!File.Exists(filePath))
-        {
-          var binaries = Path.Combine(baseDirectory, "bin");
-          filePath = Path.Combine(binaries, "wkhtmltoimage.exe");
-        }
-        return new MEDOSerializingXML.MEDOStamp(signaturesStamp,
-                                                signStampCoordinates.Horizontally,
-                                                signStampCoordinates.Vertically,
-                                                signStampCoordinates.Width,
-                                                signStampCoordinates.Height, filePath, stampPageType, stampedPages);
+        stampPageType = MEDOSerializingXML.Stamps.StampedPages.PageRange;
+        stampedPages.Add(signStampCoordinates.PageNumber);
       }
-      return null;
+      var signatureSerialNumber = signature.SignCertificate.Thumbprint.ToLower();
+      var signatureUserName = signature.SignatoryFullName;
+      var signatureDates = string.Format("с {0} по {1}", signature.SignCertificate.NotBefore.Value.ToString("dd.MM.yyyy"), signature.SignCertificate.NotAfter.Value.ToString("dd.MM.yyyy"));
+      return new MEDOSerializingXML.MEDOStamp(base64PngEmblem, signatureSerialNumber, signatureUserName, signatureDates,
+                                              signStampCoordinates.Horizontally,
+                                              signStampCoordinates.Vertically,
+                                              signStampCoordinates.Width,
+                                              signStampCoordinates.Height, stampPageType, stampedPages);
     }
 
   }

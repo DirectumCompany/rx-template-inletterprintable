@@ -142,6 +142,38 @@
             <param name="inputStream">Поток с картинкой.</param>
             <param name="resultStream">Поток для записи результата.</param>
         </member>
+        <member name="M:Sungero.AsposeExtensions.HtmlTagReader.GetInlineImagesCount(System.String)">
+            <summary>
+            Получить количество картинок, содержащихся в письме.
+            </summary>
+            <param name="path">Путь до тела письма.</param>
+            <returns>Количество картинок.</returns>
+            <remarks>Если картинка встроена в тело письма, то внутри тега img в поле src ссылка на картинку содержит CID.
+            Метод возвращает количество ссылок такого формата.</remarks>
+        </member>
+        <member name="M:Sungero.AsposeExtensions.HtmlTagReader.GetInlineImagesCount(System.Byte[])">
+            <summary>
+            Получить количество картинок, содержащихся в письме.
+            </summary>
+            <param name="body">Тело письма.</param>
+            <returns>Количество картинок.</returns>
+            <remarks>Если картинка встроена в тело письма, то внутри тега img в поле src ссылка на картинку содержит CID.
+            Метод возвращает количество ссылок такого формата.</remarks>
+        </member>
+        <member name="M:Sungero.AsposeExtensions.HtmlTagReader.GetTextFromHtml(System.String)">
+            <summary>
+            Получить текст из html-тела письма.
+            </summary>
+            <param name="htmlPath">Путь до тела письма.</param>
+            <returns>Текст письма.</returns>
+        </member>
+        <member name="M:Sungero.AsposeExtensions.HtmlTagReader.GetTextFromHtml(System.Byte[])">
+            <summary>
+            Получить текст из html-тела письма.
+            </summary>
+            <param name="htmlBody">Тело письма.</param>
+            <returns>Текст письма.</returns>
+        </member>
         <member name="M:Sungero.AsposeExtensions.TagReader.#ctor(System.IO.Stream)">
             <summary>
             Чтение документа Word.
