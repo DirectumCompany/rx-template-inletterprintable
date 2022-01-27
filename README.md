@@ -18,8 +18,8 @@ if (_obj.Versions.Where(x => Signatures.Get(x).Where(s => s.SignatureType == Sig
   e.AddWarning(PrintableTemplate.Resources.NoExistsSignedVersion);
 else
 {
-  PrintableTemplate.PublicFunctions.Module.GeneratePrintableForm(_obj);
-  e.AddInformation(PrintableTemplate.Resources.ActionResult);
+  if (PrintableTemplate.PublicFunctions.Module.GeneratePrintableForm(_obj))
+    e.AddInformation(PrintableTemplate.Resources.ActionResult);
 }
 ```
 3.  В событии "Возможность выполнения" задать условие доступности действия
