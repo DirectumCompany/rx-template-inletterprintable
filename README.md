@@ -28,7 +28,7 @@ return !_obj.State.IsInserted && _obj.HasVersions && !_obj.State.IsChanged && _o
 ```
 
 ## Порядок установки
-Для работы требуется установленный Directum RX и решение Интеграция с МЭДО версии 4.0. 
+Для работы требуется установленный Directum RX и решение Интеграция с МЭДО версии 4.0.  
 А так же неоходимо обновить сторонние библиотеки Sungero.AsposeExtensions.dll и MEDOSerializingXML.dll в модуле "PrintableTemplate". Необходимо взять эти библиотеки из модуля "MEDO" решения Интеграция с МЭДО.
 
 ### Установка для ознакомления
