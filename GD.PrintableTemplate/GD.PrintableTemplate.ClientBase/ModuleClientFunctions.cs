@@ -13,11 +13,12 @@ namespace GD.PrintableTemplate.Client
     /// Создание версии входящего письма с штампами рег. данных и ЭП.
     /// </summary>
     /// <param name="letter">Входящий документ.</param>
+    /// <returns>Было ли запущено формирование версии.</returns>
     [Public]
-    public void GeneratePrintableForm(Sungero.RecordManagement.IIncomingLetter letter)
+    public bool GeneratePrintableForm(Sungero.RecordManagement.IIncomingLetter letter)
     {      
       if (Sungero.Company.Employees.Current == null)
-        return;
+        return false;
       
       var dialog = Dialogs.CreateInputDialog("");
       var personalSettings = GovernmentSolution.PersonalSettings.As(Sungero.Docflow.PublicFunctions.PersonalSetting.GetPersonalSettings(Sungero.Company.Employees.Current));
@@ -69,6 +70,11 @@ namespace GD.PrintableTemplate.Client
                                                                               widthSignature.Value.Value);
         
         Functions.Module.Remote.GenerateNewVersionWithStamp(letter, stampRegCoordin, stampRegInResponseToCoordin, stampSignatureCoordin);
+        return true;
+      } 
+      else
+      {
+        return false;
       }
     }
   }
