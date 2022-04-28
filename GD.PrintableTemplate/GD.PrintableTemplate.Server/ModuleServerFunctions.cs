@@ -23,22 +23,22 @@ namespace GD.PrintableTemplate.Server
       var newVersion = this.CreatePdfVersionFromVersion(letter, version);
       var pdfDocumentStream = new System.IO.MemoryStream();
       newVersion.Body.Read().CopyTo(pdfDocumentStream);
-      var regStamp = this.CreateRegStamp(letter, regStampCoordinates, true);
+      var regStamp = this.CreateIncomingRegStamp(letter, regStampCoordinates, Resources.RegDataTemplate);
       pdfDocumentStream = regStamp.AddImageToPDF(pdfDocumentStream);
       if (letter.InResponseTo != null)
       {
-        var regStampInResponseTo = this.CreateRegStamp(letter.InResponseTo, regStampInResponseToCoordinates, false);
+        var regStampInResponseTo = this.CreateRegStamp(letter.InResponseTo, regStampInResponseToCoordinates, Resources.RegDataInResponseTo);
         pdfDocumentStream = regStampInResponseTo.AddImageToPDF(pdfDocumentStream);
       }
-        
+      
       var signature = Signatures.Get(version)
-          .Where(s => s.SignatureType == SignatureType.Approval && s.SignCertificate != null).FirstOrDefault();
+        .Where(s => s.SignatureType == SignatureType.Approval && s.SignCertificate != null).FirstOrDefault();
       if (signature != null)
       {
         var sigStamp = this.CreateSigStamp(signStampCoordinates, signature);
         if (sigStamp != null)
           pdfDocumentStream = sigStamp.AddImageToPDF(pdfDocumentStream);
-      }        
+      }
       newVersion.Body.Write(pdfDocumentStream);
       pdfDocumentStream.Close();
       letter.Save();
@@ -88,11 +88,37 @@ namespace GD.PrintableTemplate.Server
     /// </summary>
     /// <param name="document">Документ.</param>
     /// <param name="regStampCoordinates">Координаты штампов.</param>
-    /// <param name="isMainDoc">Основной документ?</param>
+    /// <param name="templateRegDataDoc">Шаблон штампа.</param>
     /// <returns>Штамп.</returns>
-    public virtual MEDOSerializingXML.MEDOStamp CreateRegStamp(Sungero.Docflow.IOfficialDocument document, Structures.Module.StampCoordinates regStampCoordinates, bool isMainDoc)
+    public virtual MEDOSerializingXML.MEDOStamp CreateRegStamp(Sungero.Docflow.IOfficialDocument document, Structures.Module.StampCoordinates regStampCoordinates, string templateRegDataDoc)
     {
-      var regStampInfo = this.GetReqStamp(document, isMainDoc);
+      var regStampInfo = this.GetRegStamp(document, templateRegDataDoc);
+      var stampPageType = MEDOSerializingXML.Stamps.StampedPages.FirstPage;
+      var stampedPages = new List<int>();
+      if (regStampCoordinates.PageNumber > 1)
+      {
+        stampPageType = MEDOSerializingXML.Stamps.StampedPages.PageRange;
+        stampedPages.Add(regStampCoordinates.PageNumber);
+      }
+      
+      return new MEDOSerializingXML.MEDOStamp(regStampInfo,
+                                              regStampCoordinates.Horizontally,
+                                              regStampCoordinates.Vertically,
+                                              regStampCoordinates.Width,
+                                              regStampCoordinates.Height,
+                                              MEDO.PublicConstants.Module.Border, stampPageType, stampedPages);
+    }
+    
+    /// <summary>
+    /// Генерация штампа для входящего.
+    /// </summary>
+    /// <param name="document">Документ.</param>
+    /// <param name="regStampCoordinates">Координаты штампов.</param>
+    /// <param name="templateRegDataDoc">Шаблон штампа.</param>
+    /// <returns>Штамп.</returns>
+    public virtual MEDOSerializingXML.MEDOStamp CreateIncomingRegStamp(Sungero.Docflow.IIncomingDocumentBase document, Structures.Module.StampCoordinates regStampCoordinates, string templateRegDataDoc)
+    {
+      var regStampInfo = this.GetIncomingRegStamp(document, templateRegDataDoc);
       var stampPageType = MEDOSerializingXML.Stamps.StampedPages.FirstPage;
       var stampedPages = new List<int>();
       if (regStampCoordinates.PageNumber > 1)
@@ -113,22 +139,28 @@ namespace GD.PrintableTemplate.Server
     /// Сформировать текст для штампа рег данных.
     /// </summary>
     /// <param name="document">Документ.</param>
-    /// <param name="isMainDoc">Основной документ?</param>
+    /// <param name="templateRegDataDoc">Шаблон штампа.</param>
     /// <returns>Штамп рег. данных в формате строки.</returns>
-    public virtual string GetReqStamp(Sungero.Docflow.IOfficialDocument document, bool isMainDoc)
+    public virtual string GetRegStamp(Sungero.Docflow.IOfficialDocument document, string templateRegDataDoc)
     {
-      var templateRegDataDoc = string.Empty;
-      if (isMainDoc)
-        templateRegDataDoc = Resources.RegDataTemplate;
-      else
-        templateRegDataDoc = Resources.RegDataInResponseTo;
-
-      var stampLines = new List<string>();
       var regDate = document.RegistrationDate != null ? document.RegistrationDate.Value.ToString("dd.MM.yyyy") : string.Empty;
       var regNum = document.RegistrationNumber;
       var regInfoStamp = templateRegDataDoc.Replace("{RegNum}", regNum).Replace("{RegDate}", regDate);
-      stampLines.Add(regInfoStamp);      
-      return string.Join("\n", stampLines.ToArray());
+      return regInfoStamp;
+    }
+    
+    /// <summary>
+    /// Сформировать текст для штампа входящего письма.
+    /// </summary>
+    /// <param name="document">Документ.</param>
+    /// <param name="templateRegDataDoc">Шаблон штампа.</param>
+    /// <returns>Штамп "В ответ на" в формате строки.</returns>
+    public virtual string GetIncomingRegStamp(Sungero.Docflow.IIncomingDocumentBase document, string templateRegDataDoc)
+    {
+      var regDate = document.Dated != null ? document.Dated.Value.ToString("dd.MM.yyyy") : string.Empty;
+      var regNum = document.InNumber;
+      var regInfoStamp = templateRegDataDoc.Replace("{RegNum}", regNum).Replace("{RegDate}", regDate);
+      return regInfoStamp;
     }
     
     /// <summary>
@@ -143,7 +175,7 @@ namespace GD.PrintableTemplate.Server
       var commonSetting = MEDO.CommonMedoSettingses.GetAll().FirstOrDefault();
       base64PngEmblem = commonSetting.SignatureStampLogo;
       if (string.IsNullOrEmpty(base64PngEmblem))
-        base64PngEmblem = MEDO.PublicConstants.Module.StampEmblem;      
+        base64PngEmblem = MEDO.PublicConstants.Module.StampEmblem;
       var stampPageType = MEDOSerializingXML.Stamps.StampedPages.FirstPage;
       var stampedPages = new List<int>();
       if (signStampCoordinates.PageNumber > 1)
