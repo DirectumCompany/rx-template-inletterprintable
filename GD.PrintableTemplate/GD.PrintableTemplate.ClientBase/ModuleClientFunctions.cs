@@ -15,10 +15,24 @@ namespace GD.PrintableTemplate.Client
     /// <param name="letter">Входящий документ.</param>
     /// <returns>Было ли запущено формирование версии.</returns>
     [Public]
-    public bool GeneratePrintableForm(Sungero.RecordManagement.IIncomingLetter letter)
-    {      
+    public PrintableTemplate.Structures.Module.IGeneratePrintableFormResult GeneratePrintableForm(Sungero.RecordManagement.IIncomingLetter letter)
+    {
+      var errors = new List<string>();
+      
       if (Sungero.Company.Employees.Current == null)
-        return false;
+        return Structures.Module.GeneratePrintableFormResult.Create(false, errors);
+      
+      if (string.IsNullOrEmpty(letter.InNumber))
+        errors.Add(GD.PrintableTemplate.Resources.NotFilledPropertyFormat(letter.Info.Properties.InNumber.LocalizedName));
+      
+      if (!letter.Dated.HasValue)
+        errors.Add(GD.PrintableTemplate.Resources.NotFilledPropertyFormat(letter.Info.Properties.Dated.LocalizedName));
+      
+      if (!letter.Versions.Where(x => Signatures.Get(x).Where(s => s.SignatureType == SignatureType.Approval).Any()).Any())
+        errors.Add(PrintableTemplate.Resources.NoExistsSignedVersion);
+      
+      if (errors.Any())
+        return Structures.Module.GeneratePrintableFormResult.Create(false, errors);
       
       var dialog = Dialogs.CreateInputDialog("");
       var personalSettings = GovernmentSolution.PersonalSettings.As(Sungero.Docflow.PublicFunctions.PersonalSetting.GetPersonalSettings(Sungero.Company.Employees.Current));
@@ -50,7 +64,7 @@ namespace GD.PrintableTemplate.Client
                                                            GovernmentSolution.PersonalSettings.Info.Properties.StampCoordinates.Properties.Width.LocalizedName), true, isStamp ? stampCoordinates.Width : null);
       
       if (dialog.Show() == DialogButtons.Ok)
-      {        
+      {
         var stampRegCoordin = Structures.Module.StampCoordinates.Create(pageRegData.Value.Value,
                                                                         horizontallyRegData.Value.Value,
                                                                         verticallyRegData.Value.Value,
@@ -70,11 +84,11 @@ namespace GD.PrintableTemplate.Client
                                                                               widthSignature.Value.Value);
         
         Functions.Module.Remote.GenerateNewVersionWithStamp(letter, stampRegCoordin, stampRegInResponseToCoordin, stampSignatureCoordin);
-        return true;
-      } 
+        return Structures.Module.GeneratePrintableFormResult.Create(true, errors);
+      }
       else
       {
-        return false;
+        return Structures.Module.GeneratePrintableFormResult.Create(false, errors);
       }
     }
   }

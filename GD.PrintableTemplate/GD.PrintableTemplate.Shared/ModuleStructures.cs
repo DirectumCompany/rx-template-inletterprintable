@@ -6,6 +6,18 @@ using Sungero.CoreEntities;
 
 namespace GD.PrintableTemplate.Structures.Module
 {
+
+  /// <summary>
+  /// Результат создания печатной формы.
+  /// </summary>
+  [Public]
+  partial class GeneratePrintableFormResult
+  {
+    public bool IsSuccess {get; set;}
+    
+    public List<string> Errors {get; set;}
+  }
+  
   /// <summary>
   /// Информация о типе штампа, его размерах и месте простановки.
   /// </summary>

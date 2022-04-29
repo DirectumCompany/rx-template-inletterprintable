@@ -67,11 +67,29 @@
         }
       ],
       "Placement": "Client",
-      "ReturnType": "void",
-      "ReturnTypeFullName": "System.Void"
+      "ReturnType": "global::GD.PrintableTemplate.Structures.Module.IGeneratePrintableFormResult",
+      "ReturnTypeFullName": "GD.PrintableTemplate.Structures.Module.IGeneratePrintableFormResult"
     }
   ],
-  "PublicStructures": [],
+  "PublicStructures": [
+    {
+      "Name": "GeneratePrintableFormResult",
+      "IsPublic": true,
+      "Properties": [
+        {
+          "Name": "IsSuccess",
+          "TypeFullName": "global::System.Boolean"
+        },
+        {
+          "Name": "Errors",
+          "IsList": true,
+          "IsNullable": true,
+          "TypeFullName": "global::System.Collections.Generic.List<global::System.String>"
+        }
+      ],
+      "StructureNamespace": "GD.PrintableTemplate.Structures.Module"
+    }
+  ],
   "ResourceInterfaceAssemblyName": "Sungero.Domain.Interfaces",
   "ResourceInterfaceNamespace": "GD.PrintableTemplate",
   "ResourcesKeys": [
@@ -82,7 +100,8 @@
     "RegDataInResponseTo",
     "DialogTitle",
     "ActionResult",
-    "NoExistsSignedVersion"
+    "NoExistsSignedVersion",
+    "NotFilledProperty"
   ],
   "ServerAssemblyName": "GD.PrintableTemplate.Server",
   "ServerNamespace": "GD.PrintableTemplate.Server",
