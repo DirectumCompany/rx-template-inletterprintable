@@ -21,7 +21,8 @@
     "Header": {
       "NameGuid": "8b2e63b3-0c91-4962-b298-626db9bd246b",
       "BackgroundPosition": "Stretch"
-    }
+    },
+    "Tabs": []
   },
   "DesktopViews": [],
   "ExplorerTreeOrder": [
@@ -43,16 +44,16 @@
   "SharedAssemblyName": "GD.IncommingLetterPrintable.Shared",
   "SharedNamespace": "GD.IncommingLetterPrintable.Shared",
   "SpecialFolders": [],
-  "Version": "0.0.1.0",
+  "Version": "0.0.1.1",
   "Widgets": [],
   "Versions": [
     {
       "Type": "SolutionMetadata",
-      "Number": 6
+      "Number": 8
     },
     {
       "Type": "ModuleMetadata",
-      "Number": 6
+      "Number": 8
     },
     {
       "Type": "DomainApi",

@@ -21,7 +21,8 @@
     "Header": {
       "NameGuid": "e80ea78a-2d92-449d-8698-6fbc1a5da442",
       "BackgroundPosition": "Stretch"
-    }
+    },
+    "Tabs": []
   },
   "Dependencies": [
     {
@@ -108,12 +109,12 @@
   "SharedAssemblyName": "GD.PrintableTemplate.Shared",
   "SharedNamespace": "GD.PrintableTemplate.Shared",
   "SpecialFolders": [],
-  "Version": "0.0.1.0",
+  "Version": "0.0.1.1",
   "Widgets": [],
   "Versions": [
     {
       "Type": "ModuleMetadata",
-      "Number": 6
+      "Number": 8
     },
     {
       "Type": "DomainApi",
