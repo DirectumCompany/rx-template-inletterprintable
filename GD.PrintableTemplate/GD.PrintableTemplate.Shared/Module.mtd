@@ -41,6 +41,8 @@
   "Importance": "Medium",
   "InterfaceAssemblyName": "Sungero.Domain.Interfaces",
   "InterfaceNamespace": "GD.PrintableTemplate",
+  "IsolatedAssemblyName": "GD.PrintableTemplate.Isolated",
+  "IsolatedNamespace": "GD.PrintableTemplate.Isolated",
   "IsVisible": false,
   "Libraries": [
     {
