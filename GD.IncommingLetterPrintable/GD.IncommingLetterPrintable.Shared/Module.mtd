@@ -34,6 +34,8 @@
   "Importance": "Medium",
   "InterfaceAssemblyName": "Sungero.Domain.Interfaces",
   "InterfaceNamespace": "GD.IncommingLetterPrintable",
+  "IsolatedAssemblyName": "GD.IncommingLetterPrintable.Isolated",
+  "IsolatedNamespace": "GD.IncommingLetterPrintable.Isolated",
   "OrderedSpecialFolders": [],
   "PublicStructures": [],
   "ResourceInterfaceAssemblyName": "Sungero.Domain.Interfaces",
@@ -44,7 +46,7 @@
   "SharedAssemblyName": "GD.IncommingLetterPrintable.Shared",
   "SharedNamespace": "GD.IncommingLetterPrintable.Shared",
   "SpecialFolders": [],
-  "Version": "0.0.1.1",
+  "Version": "0.0.1.2",
   "Widgets": [],
   "Versions": [
     {
