@@ -53,9 +53,8 @@ namespace GD.PrintableTemplate.Server
     public Sungero.Content.IElectronicDocumentVersions CreatePdfVersionFromVersion(Sungero.Content.IElectronicDocument document, Sungero.Content.IElectronicDocumentVersions version)
     {
       var versionExtension = version.BodyAssociatedApplication.Extension.ToLower();
-      if (!Sungero.AsposeExtensions.Converter.CheckIfExtensionIsSupported(versionExtension))
+      if (!Sungero.Docflow.IsolatedFunctions.PdfConverter.CheckIfExtensionIsSupported(versionExtension))
         throw new Exception(Resources.InvalidExtention);
-      var pdfConverter = new Sungero.AsposeExtensions.Converter();
       
       System.IO.Stream pdfDocumentStream = null;
       using (var inputStream = new System.IO.MemoryStream())
@@ -63,9 +62,9 @@ namespace GD.PrintableTemplate.Server
         version.Body.Read().CopyTo(inputStream);
         try
         {
-          pdfDocumentStream = pdfConverter.GeneratePdf(inputStream, versionExtension);
+          pdfDocumentStream = Sungero.Docflow.IsolatedFunctions.PdfConverter.GeneratePdf(inputStream, versionExtension);
         }
-        catch (Sungero.AsposeExtensions.PdfConvertException e)
+        catch (AppliedCodeException e)
         {
           Logger.Error(Sungero.Docflow.Resources.PdfConvertErrorFormat(document.Id), e.InnerException);
           throw new Exception(Sungero.Docflow.Resources.PdfConvertErrorFormat(document.Id), e.InnerException);
@@ -169,28 +168,31 @@ namespace GD.PrintableTemplate.Server
     /// <param name="document">Документ.</param>
     /// <param name="sigStampCoordinates">Координаты.</param>
     /// <returns>Штамп.</returns>
-    public virtual MEDOSerializingXML.MEDOStamp CreateSigStamp(Structures.Module.StampCoordinates signStampCoordinates, Sungero.Domain.Shared.ISignature signature)
+    public virtual MEDOSerializingXML.MEDOStamp CreateSigStamp(Structures.Module.StampCoordinates sigStampCoordinates, Sungero.Domain.Shared.ISignature signature)
     {
-      var base64PngEmblem = string.Empty;
-      var commonSetting = MEDO.CommonMedoSettingses.GetAll().FirstOrDefault();
-      base64PngEmblem = commonSetting.SignatureStampLogo;
-      if (string.IsNullOrEmpty(base64PngEmblem))
-        base64PngEmblem = MEDO.PublicConstants.Module.StampEmblem;
-      var stampPageType = MEDOSerializingXML.Stamps.StampedPages.FirstPage;
-      var stampedPages = new List<int>();
-      if (signStampCoordinates.PageNumber > 1)
+      if (signature != null)
       {
-        stampPageType = MEDOSerializingXML.Stamps.StampedPages.PageRange;
-        stampedPages.Add(signStampCoordinates.PageNumber);
+        var base64PngEmblem = GovernmentCommons.PublicFunctions.Module.Remote.GetSettings().SignatureStampLogo;
+        var stampPageType = MEDOSerializingXML.Stamps.StampedPages.FirstPage;
+        var stampedPages = new List<int>();
+        if (sigStampCoordinates.PageNumber > 1)
+        {
+          stampPageType = MEDOSerializingXML.Stamps.StampedPages.PageRange;
+          stampedPages.Add(sigStampCoordinates.PageNumber);
+        }
+        
+        var certificateInfo = Sungero.Docflow.PublicFunctions.Module.GetSignatureCertificateInfo(signature.GetDataSignature());
+        var signatureSerialNumber = certificateInfo != null && certificateInfo.Serial != null ? certificateInfo.Serial : string.Empty;
+        var signatureUserName = signature.SignatoryFullName != null ? signature.SignatoryFullName : string.Empty;
+        
+        var signatureDates = string.Format("с {0} по {1}", signature.SignCertificate.NotBefore.Value.ToString("dd.MM.yyyy"), signature.SignCertificate.NotAfter.Value.ToString("dd.MM.yyyy"));
+        return new MEDOSerializingXML.MEDOStamp(base64PngEmblem, signatureSerialNumber, signatureUserName, signatureDates,
+                                                sigStampCoordinates.Horizontally,
+                                                sigStampCoordinates.Vertically,
+                                                sigStampCoordinates.Width,
+                                                sigStampCoordinates.Height, stampPageType, stampedPages);
       }
-      var signatureSerialNumber = signature.SignCertificate.Thumbprint.ToLower();
-      var signatureUserName = signature.SignatoryFullName;
-      var signatureDates = string.Format("с {0} по {1}", signature.SignCertificate.NotBefore.Value.ToString("dd.MM.yyyy"), signature.SignCertificate.NotAfter.Value.ToString("dd.MM.yyyy"));
-      return new MEDOSerializingXML.MEDOStamp(base64PngEmblem, signatureSerialNumber, signatureUserName, signatureDates,
-                                              signStampCoordinates.Horizontally,
-                                              signStampCoordinates.Vertically,
-                                              signStampCoordinates.Width,
-                                              signStampCoordinates.Height, stampPageType, stampedPages);
+      return null;
     }
 
   }
