@@ -49,11 +49,6 @@
       "NameGuid": "b44b0e5c-938c-4b86-a2ae-32f4bfdc2ea6",
       "Name": "MEDOSerializingXML",
       "Scope": "Both"
-    },
-    {
-      "NameGuid": "d23613a6-6a7e-491f-8ff0-7922c8e5321f",
-      "Name": "AsposeExtensions",
-      "Scope": "Both"
     }
   ],
   "Overridden": [

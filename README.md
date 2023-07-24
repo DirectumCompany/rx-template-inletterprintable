@@ -18,8 +18,11 @@ if (_obj.Versions.Where(x => Signatures.Get(x).Where(s => s.SignatureType == Sig
   e.AddWarning(PrintableTemplate.Resources.NoExistsSignedVersion);
 else
 {
-  if (PrintableTemplate.PublicFunctions.Module.GeneratePrintableForm(_obj))
+  var result = PrintableTemplate.PublicFunctions.Module.GeneratePrintableForm(_obj);
+  if (result.IsSuccess)
     e.AddInformation(PrintableTemplate.Resources.ActionResult);
+  else
+    result.Errors.ForEach(e.AddWarning);
 }
 ```
 3.  В событии "Возможность выполнения" задать условие доступности действия
@@ -28,8 +31,8 @@ return !_obj.State.IsInserted && _obj.HasVersions && !_obj.State.IsChanged && _o
 ```
 
 ## Порядок установки
-Для работы требуется установленный Directum RX и решение Интеграция с МЭДО версии 4.0.  
-А так же неоходимо обновить сторонние библиотеки Sungero.AsposeExtensions.dll и MEDOSerializingXML.dll в модуле "PrintableTemplate". Необходимо взять эти библиотеки из модуля "MEDO" решения Интеграция с МЭДО.
+Для работы требуется установленный Directum RX и решение Интеграция с МЭДО версии 4.7.  
+А так же неоходимо обновить стороннюю библиотеку MEDOSerializingXML в модуле "PrintableTemplate". Необходимо взять эту библиотеку из модуля "MEDO" решения Интеграция с МЭДО.
 
 ### Установка для ознакомления
 1. Склонировать репозиторий IncommingLetterPrintable в папку.
@@ -39,7 +42,7 @@ return !_obj.State.IsInserted && _obj.HasVersions && !_obj.State.IsChanged && _o
   <repository folderName="Base" solutionType="Base" url="" />
   <repository folderName="RX" solutionType="Base" url="<адрес локального репозитория>" />
   <repository folderName="<Папка из п.1>" solutionType="Work" 
-     url="https://customdevtfs.directum.ru/tfs/GovernmentDepartmentsRX/GovernmentStSol/_git/IncommingLetterPrintable" />
+     url="https://github.com/DirectumCompany/rx-template-inletterprintable />
 </block>
 ```
 
