@@ -68,6 +68,18 @@
       "Placement": "Client",
       "ReturnType": "global::GD.PrintableTemplate.Structures.Module.IGeneratePrintableFormResult",
       "ReturnTypeFullName": "GD.PrintableTemplate.Structures.Module.IGeneratePrintableFormResult"
+    },
+    {
+      "Name": "GetRegStamp",
+      "Parameters": [
+        {
+          "Name": "document",
+          "ParameterType": "global::Sungero.RecordManagement.IIncomingLetter",
+          "ParameterTypeFullName": "Sungero.RecordManagement.IIncomingLetter, Sungero.Domain.Interfaces"
+        }
+      ],
+      "ReturnType": "global::System.String",
+      "ReturnTypeFullName": "System.String"
     }
   ],
   "PublicStructures": [

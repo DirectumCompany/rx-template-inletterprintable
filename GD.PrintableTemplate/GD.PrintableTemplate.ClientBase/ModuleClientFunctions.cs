@@ -1,4 +1,4 @@
-﻿using GD.GovernmentSolution;
+using GD.GovernmentSolution;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,25 +65,16 @@ namespace GD.PrintableTemplate.Client
       
       if (dialog.Show() == DialogButtons.Ok)
       {
-        var stampRegCoordin = Structures.Module.StampCoordinates.Create(pageRegData.Value.Value,
-                                                                        horizontallyRegData.Value.Value,
-                                                                        verticallyRegData.Value.Value,
-                                                                        heightRegData.Value.Value,
-                                                                        widthRegData.Value.Value);
-        
-        var stampRegInResponseToCoordin = Structures.Module.StampCoordinates.Create(pageRegData.Value.Value,
-                                                                                    horizontallyRegData.Value.Value,
-                                                                                    verticallyRegData.Value.Value + heightRegData.Value.Value,
-                                                                                    heightRegData.Value.Value,
-                                                                                    widthRegData.Value.Value);
-        
-        var stampSignatureCoordin = Structures.Module.StampCoordinates.Create(pageSignature.Value.Value,
-                                                                              horizontallySignature.Value.Value,
-                                                                              verticallySignature.Value.Value,
-                                                                              heightSignature.Value.Value,
-                                                                              widthSignature.Value.Value);
-        
-        Functions.Module.Remote.GenerateNewVersionWithStamp(letter, stampRegCoordin, stampRegInResponseToCoordin, stampSignatureCoordin);
+        Functions.Module.Remote.GenerateNewVersionWithStamp(letter, pageRegData.Value.Value,
+                                                            horizontallyRegData.Value.Value,
+                                                            verticallyRegData.Value.Value,
+                                                            heightRegData.Value.Value,
+                                                            widthRegData.Value.Value,
+                                                            pageSignature.Value.Value,
+                                                            horizontallySignature.Value.Value,
+                                                            verticallySignature.Value.Value,
+                                                            heightSignature.Value.Value,
+                                                            widthSignature.Value.Value);
         return Structures.Module.GeneratePrintableFormResult.Create(true, errors);
       }
       else
