@@ -99,7 +99,7 @@ namespace GD.PrintableTemplate.Server
     /// <summary>
     /// Сформировать текст для штампа рег данных.
     /// </summary>
-    /// <param name="document">Письмо исходящее.</param>
+    /// <param name="document">Письмо.</param>
     /// <returns>Штамп рег. данных в формате HTML.</returns>
     [Public]
     public virtual string GetRegStamp(Sungero.RecordManagement.IIncomingLetter document)
@@ -120,10 +120,9 @@ namespace GD.PrintableTemplate.Server
         regInfoStamp = templateRegDataMainDoc.Replace("{RegNum}", regNum);
         regInfoStamp = regInfoStamp.Replace("{RegDate}", regDate);
       }
-
       stampLines.Add(regInfoStamp);
       
-      // Получить связнное исходящее письмо в ответ на которое полученно входящее.
+      // Добавить в штамп информацию об исходящем письме.
       if (!string.IsNullOrEmpty(templateRegDataInDoc) && document.Dated != null && document.InNumber != null)
       {
         var incomingDocDate = string.Empty;
