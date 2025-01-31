@@ -28,7 +28,7 @@ namespace GD.PrintableTemplate.Client
       if (!letter.Dated.HasValue)
         errors.Add(GD.PrintableTemplate.Resources.NotFilledPropertyFormat(letter.Info.Properties.Dated.LocalizedName));
       
-      if (!letter.Versions.Where(x => Signatures.Get(x).Where(s => s.SignatureType == SignatureType.Approval).Any()).Any())
+      if (!letter.Versions.Where(x => Signatures.Get(x).Where(s => s.SignatureType == SignatureType.Approval && s.SignCertificate != null).Any()).Any())
         errors.Add(PrintableTemplate.Resources.NoExistsSignedVersion);
       
       if (errors.Any())
