@@ -59,6 +59,7 @@ namespace GD.PrintableTemplate.Server
                                                                                  null,
                                                                                  null,
                                                                                  null,
+                                                                                 null,
                                                                                  null));
       
       stampCoordinatesList.Add(GD.MEDO.Structures.Module.StampCoordinates.Create(GD.GovernmentSolution.OutgoingLetterStampCoordinates.Type.Reg.Value,
@@ -70,6 +71,7 @@ namespace GD.PrintableTemplate.Server
                                                                                  null,
                                                                                  this.GetRegStamp(letter),
                                                                                  new int[] { pageRegData },
+                                                                                 null,
                                                                                  null,
                                                                                  null,
                                                                                  null,
