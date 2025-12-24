@@ -48,7 +48,7 @@ return !_obj.State.IsInserted && _obj.HasVersions && !_obj.State.IsChanged && _o
       repository:
       -   '@folderName': 'work'
           '@solutionType': 'Work'
-          '@url': https://github.com/DirectumCompany/rx-template-inletterprintabl.git'
+          '@url': https://github.com/DirectumCompany/rx-template-inletterprintable.git'
       -   '@folderName': 'base'
           '@solutionType': 'Base'
           '@url': ''
@@ -67,13 +67,14 @@ return !_obj.State.IsInserted && _obj.HasVersions && !_obj.State.IsChanged && _o
       repository:
       -   '@folderName': 'work'
           '@solutionType': 'Work'
-          '@url': https://github.com/DirectumCompany/rx-template-inletterprintabl.git'
+          '@url': https://github.com/DirectumCompany/rx-template-inletterprintable.git'
       -   '@folderName': 'base'
           '@solutionType': 'Base'
           '@url': ''
 ```
 
 **B. Подключение на базовый слой.**
+
 Вариант не рекомендуется, так как при выходе версии шаблона разработки не гарантируется обратная совместимость.
 1. Склонировать репозиторий IncommingLetterPrintable в папку.
 2. Указать в config.yml в разделе DevelopmentStudio:
@@ -89,7 +90,7 @@ return !_obj.State.IsInserted && _obj.HasVersions && !_obj.State.IsChanged && _o
           '@url': ''
       -   '@folderName': 'base'
           '@solutionType': 'Base'
-          '@url': 'https://github.com/DirectumCompany/rx-template-inletterprintabl.git'
+          '@url': 'https://github.com/DirectumCompany/rx-template-inletterprintable.git'
 ```
 
 **C. Копирование репозитория в систему контроля версий.**
@@ -99,5 +100,6 @@ return !_obj.State.IsInserted && _obj.HasVersions && !_obj.State.IsChanged && _o
 3. Перейти в папку из п. 2.
 4. Импортировать клонированный репозиторий в систему контроля версий командой:
 `git push –mirror <Адрес репозитория из п. 1>`
+
 
 
