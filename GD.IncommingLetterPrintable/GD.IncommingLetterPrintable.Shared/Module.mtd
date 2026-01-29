@@ -31,7 +31,6 @@
       "ItemId": "7884c11f-0b70-45ff-8976-0ec50105a395"
     }
   ],
-  "IconResourcesKeys": [],
   "Importance": "Medium",
   "InterfaceAssemblyName": "Sungero.Domain.Interfaces",
   "InterfaceNamespace": "GD.IncommingLetterPrintable",
@@ -41,7 +40,6 @@
   "PublicStructures": [],
   "ResourceInterfaceAssemblyName": "Sungero.Domain.Interfaces",
   "ResourceInterfaceNamespace": "GD.IncommingLetterPrintable",
-  "ResourcesKeys": [],
   "ServerAssemblyName": "GD.IncommingLetterPrintable.Server",
   "ServerNamespace": "GD.IncommingLetterPrintable.Server",
   "SharedAssemblyName": "GD.IncommingLetterPrintable.Shared",
@@ -52,11 +50,11 @@
   "Versions": [
     {
       "Type": "SolutionMetadata",
-      "Number": 8
+      "Number": 12
     },
     {
       "Type": "ModuleMetadata",
-      "Number": 8
+      "Number": 12
     },
     {
       "Type": "DomainApi",

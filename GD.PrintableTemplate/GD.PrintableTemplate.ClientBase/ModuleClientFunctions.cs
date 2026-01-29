@@ -7,7 +7,7 @@ using Sungero.CoreEntities;
 
 namespace GD.PrintableTemplate.Client
 {
-  public class ModuleFunctions
+  public partial class ModuleFunctions
   {
     /// <summary>
     /// Создание версии входящего письма с штампами рег. данных и ЭП.

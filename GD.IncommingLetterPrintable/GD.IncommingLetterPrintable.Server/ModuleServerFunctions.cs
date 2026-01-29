@@ -6,7 +6,7 @@ using Sungero.CoreEntities;
 
 namespace GD.IncommingLetterPrintable.Server
 {
-  public class ModuleFunctions
+  public partial class ModuleFunctions
   {
 
   }

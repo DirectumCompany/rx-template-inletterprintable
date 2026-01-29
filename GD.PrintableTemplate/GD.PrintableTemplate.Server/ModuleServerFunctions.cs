@@ -7,7 +7,7 @@ using Sungero.CoreEntities;
 
 namespace GD.PrintableTemplate.Server
 {
-  public class ModuleFunctions
+  public partial class ModuleFunctions
   {
     /// <summary>
     /// Создать версию в формате pdf с штампами.
